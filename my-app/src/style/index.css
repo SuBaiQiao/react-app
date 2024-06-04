@@ -1,0 +1,22 @@
+.foo {
+    color: red;
+}
+
+.common {
+    border: 1px solid black;
+    margin: 5px;
+}
+
+.nav-item {
+    color: gray;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.active {
+    color: black;
+}
+
+.nav-item:hover {
+    color: #09a0da;
+}
