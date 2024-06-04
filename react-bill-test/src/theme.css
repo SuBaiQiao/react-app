@@ -1,0 +1,9 @@
+/*全局生效*/
+/*:root:root {*/
+/*    --adm-color-primary: #a062d4;*/
+/*}*/
+
+/*局部生效*/
+.purple-theme {
+    --adm-color-primary: #a062d4;
+}
