@@ -1,6 +1,6 @@
 import {NavBar, DatePicker} from 'antd-mobile'
 import './index.scss'
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import {useSelector} from "react-redux";
@@ -10,17 +10,20 @@ const Month = () => {
     const [dateVisible, setDateVisible] = useState(false)
     const [currentDate, setCurrentDate] = useState(new Date())
     const billList = useSelector(state => state.bill.billList);
+
     const monthGroup = useMemo(() => {
         return _.groupBy(billList, (item) => dayjs(item.date).format('YYYY-MM'));
     }, [billList])
+
     const [currentMonthList, setCurrentMonthList] = useState([])
+
     const onConfirm = (e) => {
         setCurrentDate(e);
         setDateVisible(false);
         const formatDate = dayjs(e).format('YYYY-MM');
-        const monthList = monthGroup[formatDate];
-        setCurrentMonthList(monthList)
+        setCurrentMonthList(monthGroup[formatDate])
     }
+
     const monthResult = useMemo(() => {
         const pay = currentMonthList.filter(item => item.type === 'pay').reduce((a, c) => a + c.money, 0);
         const income = currentMonthList.filter(item => item.type === 'income').reduce((a, c) => a + c.money, 0);
@@ -30,6 +33,15 @@ const Month = () => {
             total: pay + income
         }
     }, [currentMonthList]);
+
+    useEffect(() => {
+        const formatDate = dayjs(currentDate).format('YYYY-MM');
+        // 边界值控制
+        if (monthGroup[formatDate]) {
+            setCurrentMonthList(monthGroup[formatDate])
+        }
+    }, [monthGroup]);
+
     return (
         <div className="monthlyBill">
             <NavBar className="nav" backArrow={false}>
