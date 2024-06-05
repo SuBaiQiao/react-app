@@ -5,14 +5,32 @@ import classNames from 'classnames'
 import {billListData} from '@/contants'
 import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
+import {save as billSave} from "@/store/modules/billStore"
+import dayjs from "dayjs";
 
 const New = () => {
     const navigate = useNavigate()
 
     const [billType, setBillType] = useState('pay'); // pay-指出,income-收入
+    const [money, setMoney] = useState('')
+    const [dateVisible, setDateVisible] = useState(false)
+    const [billDate, setBillDate] = useState(new Date())
+    const [useFor, setUseFor] = useState('')
 
     const save = () => {
-        console.log('/')
+        const dayBill = {
+            type: billType,
+            money: billType === 'pay' ? -1 * money : money,
+            date: dayjs(billDate).format('YYYY-MM-DD HH:mm:ss'),
+            useFor: useFor
+        }
+        console.log(dayBill)
+        billSave(dayBill)
+    }
+
+    const onConfirm = (e) => {
+        setBillDate(e)
+        setDateVisible(false)
     }
 
     return (
@@ -41,12 +59,16 @@ const New = () => {
 
                 <div className="kaFormWrapper">
                     <div className="kaForm">
-                        <div className="date">
+                        <div className="date" onClick={() => setDateVisible(true)}>
                             <Icon type="calendar" className="icon"/>
                             <span className="text">{'今天'}</span>
                             <DatePicker
                                 className="kaDate"
                                 title="记账日期"
+                                visible={dateVisible}
+                                onClose={() => setDateVisible(false)}
+                                onCancel={() => setDateVisible(false)}
+                                onConfirm={(e) => onConfirm(e)}
                                 max={new Date()}
                             />
                         </div>
@@ -55,6 +77,8 @@ const New = () => {
                                 className="input"
                                 placeholder="0.00"
                                 type="number"
+                                value={money}
+                                onChange={e => setMoney(e)}
                             />
                             <span className="iconYuan">¥</span>
                         </div>
@@ -73,10 +97,10 @@ const New = () => {
                                         <div
                                             className={classNames(
                                                 'item',
-                                                ''
+                                                useFor === item.type && 'selected'
                                             )}
                                             key={item.type}
-
+                                            onClick={() => setUseFor(item.type)}
                                         >
                                             <div className="icon">
                                                 <Icon type={item.type}/>

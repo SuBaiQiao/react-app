@@ -2,6 +2,7 @@
 
 import {createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
 const billList = createSlice({
     name: 'bill',
@@ -11,11 +12,16 @@ const billList = createSlice({
     reducers: {
         setBillList(state, action) {
             state.billList = action.payload;
+        },
+        save(state, action) {
+            let bill = action.payload;
+            bill.id = uuidv4();
+            state.billList = [...state.billList, bill];
         }
     }
 })
 
-const {setBillList} = billList.actions
+const {setBillList, save} = billList.actions
 
 const getBillList = () => {
     return async (dispatch) => {
@@ -27,6 +33,7 @@ const getBillList = () => {
 const reducer = billList.reducer
 
 export {
-    getBillList
+    getBillList,
+    save
 }
 export default reducer
