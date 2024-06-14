@@ -5,17 +5,19 @@ import classNames from 'classnames'
 import {billListData} from '@/contants'
 import {useNavigate} from 'react-router-dom'
 import {useState} from "react";
-import {save as billSave} from "@/store/modules/billStore"
+import {addBillList} from "@/store/modules/billStore"
 import dayjs from "dayjs";
+import {useDispatch} from "react-redux";
 
 const New = () => {
     const navigate = useNavigate()
-
+    // 准备一个控制收入支出的状态
     const [billType, setBillType] = useState('pay'); // pay-指出,income-收入
     const [money, setMoney] = useState('')
     const [dateVisible, setDateVisible] = useState(false)
     const [billDate, setBillDate] = useState(new Date())
     const [useFor, setUseFor] = useState('')
+    const dispatch = useDispatch();
 
     const save = () => {
         const dayBill = {
@@ -24,8 +26,7 @@ const New = () => {
             date: dayjs(billDate).format('YYYY-MM-DD HH:mm:ss'),
             useFor: useFor
         }
-        console.log(dayBill)
-        billSave(dayBill)
+        dispatch(addBillList(dayBill))
     }
 
     const onConfirm = (e) => {

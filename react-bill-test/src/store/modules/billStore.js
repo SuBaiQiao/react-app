@@ -14,9 +14,7 @@ const billList = createSlice({
             state.billList = action.payload;
         },
         save(state, action) {
-            let bill = action.payload;
-            bill.id = uuidv4();
-            state.billList = [...state.billList, bill];
+            state.billList = [...state.billList, action.payload];
         }
     }
 })
@@ -30,10 +28,17 @@ const getBillList = () => {
     }
 }
 
+const addBillList = (data) => {
+    return async (dispatch) => {
+        const res = await axios.post("http://localhost:3004/ka", data)
+        dispatch(save(res.data))
+    }
+}
+
 const reducer = billList.reducer
 
 export {
     getBillList,
-    save
+    addBillList
 }
 export default reducer
