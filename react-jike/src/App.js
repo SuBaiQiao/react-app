@@ -1,7 +1,8 @@
+import { DatePicker } from 'antd';
 function App() {
   return (
     <div className="App">
-      this is app
+      this is app<DatePicker/>
     </div>
   );
 }
