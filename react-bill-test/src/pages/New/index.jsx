@@ -27,6 +27,7 @@ const New = () => {
             useFor: useFor
         }
         dispatch(addBillList(dayBill))
+        navigate(-1)
     }
 
     const onConfirm = (e) => {
@@ -62,7 +63,7 @@ const New = () => {
                     <div className="kaForm">
                         <div className="date" onClick={() => setDateVisible(true)}>
                             <Icon type="calendar" className="icon"/>
-                            <span className="text">{'今天'}</span>
+                            <span className="text">{ dayjs(billDate).format('YYYY-MM-DD') === dayjs(new Date()).format('YYYY-MM-DD') ? '今天' : dayjs(billDate).format('YYYY-MM-DD')}</span>
                             <DatePicker
                                 className="kaDate"
                                 title="记账日期"
